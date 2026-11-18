@@ -1,0 +1,1587 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Introducción paso a paso al framework web [Angular]">
+      
+      
+        <meta name="author" content="Serge Tahé">
+      
+      
+        <link rel="canonical" href="https://stahe.github.io/ales-angular-etape-par-etape-sept-2026/observables-y-estado-compartido.html">
+      
+      
+        <link rel="prev" href="enrutamiento.html">
+      
+      
+        <link rel="next" href="internacionalizacion.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>5. Observables y estado compartido - Introducción paso a paso al framework web [Angular]</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/focus.css">
+    
+      <link rel="stylesheet" href="stylesheets/bidi.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EBZC3JVJNR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    var siteName = "Introducción paso a paso al framework web [Angular]";
+    gtag('config', 'G-EBZC3JVJNR', {
+        'page_title': siteName
+    });
+  </script>
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#5-observables-y-estado-compartido" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Introducción paso a paso al framework web [Angular]" class="md-header__button md-logo" aria-label="Introducción paso a paso al framework web [Angular]" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introducción paso a paso al framework web [Angular]
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              5. Observables y estado compartido
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="purple"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="purple"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://stahe.github.io/ales-angular-etape-par-etape-sept-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Introducción paso a paso al framework web [Angular]" class="md-nav__button md-logo" aria-label="Introducción paso a paso al framework web [Angular]" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introducción paso a paso al framework web [Angular]
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://stahe.github.io/ales-angular-etape-par-etape-sept-2026" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bienvenido
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="introduccion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introducción
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="primeros-pasos-con-angular.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Primeros pasos con Angular
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="los-componentes.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Los componentes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="enrutamiento.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Enrutamiento
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Observables y estado compartido
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="observables-y-estado-compartido.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Observables y estado compartido
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#51-ejemplo-19-observables-de-rxjs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1. Ejemplo 19: observables de RxJS
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#52-ejemplo-20-un-estado-compartido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2. Ejemplo 20: un estado compartido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5.2. Ejemplo 20: un estado compartido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#521-un-servicio-que-contiene-el-estado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.1. Un servicio que contiene el estado
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#522-componentes-que-lo-comparten" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.2. Componentes que lo comparten
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#523-un-estado-que-sobrevive-a-una-recarga-de-la-pagina" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.3. Un estado que sobrevive a una recarga de la página
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#524-la-pagina" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2.4. La página
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="internacionalizacion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Internacionalización
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="el-servidor-rdvmedecins-una-caja-negra.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. El servidor RdvMedecins, una caja negra
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="comunicacion-con-el-servidor.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Comunicación con el servidor
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="conclusion-provisional.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Conclusión provisional
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="caso-de-estudio-el-cliente-angular-de-la-aplicacion-rdvmedecins.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Caso de estudio: el cliente Angular de la aplicación RdvMedecins
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="despliegue.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Despliegue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="conclusion.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Conclusión
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="apendices.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    13. Apéndices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="5-observables-y-estado-compartido">5. <span style="color: #2e74b5">Observables y estado compartido</span></h1>
+<h2 id="51-ejemplo-19-observables-de-rxjs">5.1. <span style="color: #2e74b5">Ejemplo 19: observables de RxJS</span></h2>
+<p>Ya hemos encontrado dos tipos de valores que cambian con el tiempo: los <strong>signals</strong>, que siempre tienen un valor actual, y las <strong>promesas</strong>, que entregan un único valor más adelante. <em>[Angular]</em> utiliza un tercer tipo: los <strong>observables</strong>, proporcionados por la biblioteca <em>[RxJS]</em>. Un observable es un <strong>flujo</strong> de valores que llegan con el tiempo: pulsaciones de teclas, tics de un temporizador, eventos del enrutador (ejemplo 17), la respuesta de un servidor (ejemplo 22).</p>
+<p>Su poder reside en sus <strong>operadores</strong>: funciones que transforman un flujo en otro (filtrar, esperar, descartar una solicitud caducada, etc.). Este ejemplo presenta los principales en tres escenarios.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-0-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-0-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-0-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-0-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-0-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-0-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-0-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-0-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-0-10">10</a></span>
+<span class="normal"><a href="#__codelineno-0-11">11</a></span>
+<span class="normal"><a href="#__codelineno-0-12">12</a></span>
+<span class="normal"><a href="#__codelineno-0-13">13</a></span>
+<span class="normal"><a href="#__codelineno-0-14">14</a></span>
+<span class="normal"><a href="#__codelineno-0-15">15</a></span>
+<span class="normal"><a href="#__codelineno-0-16">16</a></span>
+<span class="normal"><a href="#__codelineno-0-17">17</a></span>
+<span class="normal"><a href="#__codelineno-0-18">18</a></span>
+<span class="normal"><a href="#__codelineno-0-19">19</a></span>
+<span class="normal"><a href="#__codelineno-0-20">20</a></span>
+<span class="normal"><a href="#__codelineno-0-21">21</a></span>
+<span class="normal"><a href="#__codelineno-0-22">22</a></span>
+<span class="normal"><a href="#__codelineno-0-23">23</a></span>
+<span class="normal"><a href="#__codelineno-0-24">24</a></span>
+<span class="normal"><a href="#__codelineno-0-25">25</a></span>
+<span class="normal"><a href="#__codelineno-0-26">26</a></span>
+<span class="normal"><a href="#__codelineno-0-27">27</a></span>
+<span class="normal"><a href="#__codelineno-0-28">28</a></span>
+<span class="normal"><a href="#__codelineno-0-29">29</a></span>
+<span class="normal"><a href="#__codelineno-0-30">30</a></span>
+<span class="normal"><a href="#__codelineno-0-31">31</a></span>
+<span class="normal"><a href="#__codelineno-0-32">32</a></span>
+<span class="normal"><a href="#__codelineno-0-33">33</a></span>
+<span class="normal"><a href="#__codelineno-0-34">34</a></span>
+<span class="normal"><a href="#__codelineno-0-35">35</a></span>
+<span class="normal"><a href="#__codelineno-0-36">36</a></span>
+<span class="normal"><a href="#__codelineno-0-37">37</a></span>
+<span class="normal"><a href="#__codelineno-0-38">38</a></span>
+<span class="normal"><a href="#__codelineno-0-39">39</a></span>
+<span class="normal"><a href="#__codelineno-0-40">40</a></span>
+<span class="normal"><a href="#__codelineno-0-41">41</a></span>
+<span class="normal"><a href="#__codelineno-0-42">42</a></span>
+<span class="normal"><a href="#__codelineno-0-43">43</a></span>
+<span class="normal"><a href="#__codelineno-0-44">44</a></span>
+<span class="normal"><a href="#__codelineno-0-45">45</a></span>
+<span class="normal"><a href="#__codelineno-0-46">46</a></span>
+<span class="normal"><a href="#__codelineno-0-47">47</a></span>
+<span class="normal"><a href="#__codelineno-0-48">48</a></span>
+<span class="normal"><a href="#__codelineno-0-49">49</a></span>
+<span class="normal"><a href="#__codelineno-0-50">50</a></span>
+<span class="normal"><a href="#__codelineno-0-51">51</a></span>
+<span class="normal"><a href="#__codelineno-0-52">52</a></span>
+<span class="normal"><a href="#__codelineno-0-53">53</a></span>
+<span class="normal"><a href="#__codelineno-0-54">54</a></span>
+<span class="normal"><a href="#__codelineno-0-55">55</a></span>
+<span class="normal"><a href="#__codelineno-0-56">56</a></span>
+<span class="normal"><a href="#__codelineno-0-57">57</a></span>
+<span class="normal"><a href="#__codelineno-0-58">58</a></span>
+<span class="normal"><a href="#__codelineno-0-59">59</a></span>
+<span class="normal"><a href="#__codelineno-0-60">60</a></span>
+<span class="normal"><a href="#__codelineno-0-61">61</a></span>
+<span class="normal"><a href="#__codelineno-0-62">62</a></span>
+<span class="normal"><a href="#__codelineno-0-63">63</a></span>
+<span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span>
+<span class="normal"><a href="#__codelineno-0-84">84</a></span>
+<span class="normal"><a href="#__codelineno-0-85">85</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="c1">// 19-rxjs/src/app/app.ts - los observables de la biblioteca RxJS</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="c1">// -------------------------------------------------------------------------</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="c1">// Un OBSERVABLE es un FLUJO de valores, que llegan con el tiempo (las</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="c1">// pulsaciones de teclas, los ticks de un temporizador, la respuesta de un servidor...).</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="c1">// Angular los usa mucho: el cliente HTTP (ejemplo 22) y el enrutador</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7"></a><span class="c1">// (ejemplo 17) devuelven observables.</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8"></a><span class="c1">//   - observable.subscribe(function): nos SUSCRIBIMOS; la función recibe</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9"></a><span class="c1">//     cada valor. No ocurre nada mientras nadie esté suscrito;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10"></a><span class="c1">//   - observable.pipe(op1, op2...): un flujo NUEVO, transformado por</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11"></a><span class="c1">//     OPERADORES (map, filter, debounceTime, switchMap...);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12"></a><span class="c1">//   - toSignal(observable): un signal cuyo valor es el último valor recibido</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13"></a><span class="c1">//     (suscripción y cancelación de suscripción automáticas).</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="p">,</span><span class="w"> </span><span class="nx">DestroyRef</span><span class="p">,</span><span class="w"> </span><span class="nx">inject</span><span class="p">,</span><span class="w"> </span><span class="nx">signal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">takeUntilDestroyed</span><span class="p">,</span><span class="w"> </span><span class="nx">toSignal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core/rxjs-interop'</span><span class="p">;</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">debounceTime</span><span class="p">,</span><span class="w"> </span><span class="nx">delay</span><span class="p">,</span><span class="w"> </span><span class="nx">distinctUntilChanged</span><span class="p">,</span><span class="w"> </span><span class="nx">filter</span><span class="p">,</span><span class="w"> </span><span class="nx">interval</span><span class="p">,</span><span class="w"> </span><span class="nx">map</span><span class="p">,</span><span class="w"> </span><span class="nx">Observable</span><span class="p">,</span><span class="w"> </span><span class="k">of</span><span class="p">,</span><span class="w"> </span><span class="nx">Subject</span><span class="p">,</span><span class="w"> </span><span class="nx">switchMap</span><span class="p">,</span><span class="w"> </span><span class="nx">take</span><span class="p">,</span><span class="w"> </span><span class="nx">tap</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'rxjs'</span><span class="p">;</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20"></a><span class="kd">const</span><span class="w"> </span><span class="nx">DOCTORS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s1">'Marie PELISSIER'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Paul TATOU'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Sophie DUPONT'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Jacques DURAND'</span><span class="p">,</span><span class="w"> </span><span class="s1">'Martine PELLETIER'</span><span class="p">];</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22"></a><span class="kd">@Component</span><span class="p">({</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23"></a><span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">'app-root'</span><span class="p">,</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24"></a><span class="w">  </span><span class="nx">templateUrl</span><span class="o">:</span><span class="w"> </span><span class="s1">'./app.html'</span><span class="p">,</span>
+<a id="__codelineno-0-25" name="__codelineno-0-25"></a><span class="p">})</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">App</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">([]);</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28"></a>
+<a id="__codelineno-0-29" name="__codelineno-0-29"></a><span class="w">  </span><span class="c1">// 2. un temporizador: 0, 1, 2... cada segundo; take(20): 20 valores</span>
+<a id="__codelineno-0-30" name="__codelineno-0-30"></a><span class="w">  </span><span class="c1">// y luego el flujo se completa; map: cada valor se transforma</span>
+<a id="__codelineno-0-31" name="__codelineno-0-31"></a><span class="w">  </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">seconds$</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">interval</span><span class="p">(</span><span class="mf">1000</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span>
+<a id="__codelineno-0-32" name="__codelineno-0-32"></a><span class="w">    </span><span class="nx">take</span><span class="p">(</span><span class="mf">20</span><span class="p">),</span>
+<a id="__codelineno-0-33" name="__codelineno-0-33"></a><span class="w">    </span><span class="nx">map</span><span class="p">((</span><span class="nx">n</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="mf">20</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nx">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">1</span><span class="p">),</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35"></a><span class="w">  </span><span class="c1">// toSignal: la cuenta regresiva, como signal</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">countdown</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">toSignal</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">seconds$</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">initialValue</span><span class="o">:</span><span class="w"> </span><span class="kt">20</span><span class="w"> </span><span class="p">});</span>
+<a id="__codelineno-0-37" name="__codelineno-0-37"></a>
+<a id="__codelineno-0-38" name="__codelineno-0-38"></a><span class="w">  </span><span class="c1">// 3. una búsqueda "mientras se escribe": un Subject es un observable</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39"></a><span class="w">  </span><span class="c1">// al que EMPUJAMOS valores nosotros mismos (next)</span>
+<a id="__codelineno-0-40" name="__codelineno-0-40"></a><span class="w">  </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Subject</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">();</span>
+<a id="__codelineno-0-41" name="__codelineno-0-41"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">toSignal</span><span class="p">(</span>
+<a id="__codelineno-0-42" name="__codelineno-0-42"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">inputs</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span>
+<a id="__codelineno-0-43" name="__codelineno-0-43"></a><span class="w">      </span><span class="nx">map</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">text</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">toLowerCase</span><span class="p">()),</span>
+<a id="__codelineno-0-44" name="__codelineno-0-44"></a><span class="w">      </span><span class="nx">debounceTime</span><span class="p">(</span><span class="mf">400</span><span class="p">),</span><span class="w"> </span><span class="c1">// esperamos 400 ms sin pulsación de tecla</span>
+<a id="__codelineno-0-45" name="__codelineno-0-45"></a><span class="w">      </span><span class="nx">distinctUntilChanged</span><span class="p">(),</span><span class="w"> </span><span class="c1">// ignoramos un texto idéntico al anterior</span>
+<a id="__codelineno-0-46" name="__codelineno-0-46"></a><span class="w">      </span><span class="nx">filter</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">text</span><span class="p">.</span><span class="nx">length</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mf">2</span><span class="p">),</span>
+<a id="__codelineno-0-47" name="__codelineno-0-47"></a><span class="w">      </span><span class="nx">tap</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">trace</span><span class="p">(</span><span class="sb">`search sent: "</span><span class="si">${</span><span class="nx">text</span><span class="si">}</span><span class="sb">"`</span><span class="p">)),</span>
+<a id="__codelineno-0-48" name="__codelineno-0-48"></a><span class="w">      </span><span class="c1">// switchMap: una búsqueda por texto; si llega un nuevo texto</span>
+<a id="__codelineno-0-49" name="__codelineno-0-49"></a><span class="w">      </span><span class="c1">// antes de la respuesta, la búsqueda anterior se ABANDONA</span>
+<a id="__codelineno-0-50" name="__codelineno-0-50"></a><span class="w">      </span><span class="nx">switchMap</span><span class="p">((</span><span class="nx">text</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="nx">text</span><span class="p">)),</span>
+<a id="__codelineno-0-51" name="__codelineno-0-51"></a><span class="w">    </span><span class="p">),</span>
+<a id="__codelineno-0-52" name="__codelineno-0-52"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">initialValue</span><span class="o">:</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="kr">as</span><span class="w"> </span><span class="kt">string</span><span class="p">[]</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-0-53" name="__codelineno-0-53"></a><span class="w">  </span><span class="p">);</span>
+<a id="__codelineno-0-54" name="__codelineno-0-54"></a>
+<a id="__codelineno-0-55" name="__codelineno-0-55"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-56" name="__codelineno-0-56"></a><span class="w">    </span><span class="c1">// 1. un observable construido a mano: emite tres valores y luego se completa</span>
+<a id="__codelineno-0-57" name="__codelineno-0-57"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">threeValues</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="kt">string</span><span class="o">&gt;</span><span class="p">((</span><span class="nx">subscriber</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-58" name="__codelineno-0-58"></a><span class="w">      </span><span class="nx">subscriber</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="s1">'one'</span><span class="p">);</span>
+<a id="__codelineno-0-59" name="__codelineno-0-59"></a><span class="w">      </span><span class="nx">subscriber</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="s1">'two'</span><span class="p">);</span>
+<a id="__codelineno-0-60" name="__codelineno-0-60"></a><span class="w">      </span><span class="nx">setTimeout</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-61" name="__codelineno-0-61"></a><span class="w">        </span><span class="nx">subscriber</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="s1">'three (one second later)'</span><span class="p">);</span>
+<a id="__codelineno-0-62" name="__codelineno-0-62"></a><span class="w">        </span><span class="nx">subscriber</span><span class="p">.</span><span class="nx">complete</span><span class="p">();</span>
+<a id="__codelineno-0-63" name="__codelineno-0-63"></a><span class="w">      </span><span class="p">},</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span>
+<a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="w">    </span><span class="p">});</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a><span class="w">    </span><span class="c1">// takeUntilDestroyed: la suscripción se detiene si el componente desaparece</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a><span class="w">    </span><span class="nx">threeValues</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">takeUntilDestroyed</span><span class="p">(</span><span class="nx">inject</span><span class="p">(</span><span class="nx">DestroyRef</span><span class="p">))).</span><span class="nx">subscribe</span><span class="p">({</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a><span class="w">      </span><span class="nx">next</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="nx">value</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">trace</span><span class="p">(</span><span class="sb">`received: </span><span class="si">${</span><span class="nx">value</span><span class="si">}</span><span class="sb">`</span><span class="p">),</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a><span class="w">      </span><span class="nx">complete</span><span class="o">:</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">trace</span><span class="p">(</span><span class="s1">'stream completed'</span><span class="p">),</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a><span class="w">    </span><span class="p">});</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="nx">onInput</span><span class="p">(</span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">inputs</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a><span class="w">  </span><span class="c1">// un "servidor" simulado: la respuesta llega tras un retraso aleatorio</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a><span class="w">  </span><span class="k">private</span><span class="w"> </span><span class="nx">search</span><span class="p">(</span><span class="nx">text</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="nx">Observable</span><span class="o">&lt;</span><span class="kt">string</span><span class="p">[]</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a><span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">found</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">DOCTORS</span><span class="p">.</span><span class="nx">filter</span><span class="p">((</span><span class="nx">m</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">m</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">().</span><span class="nx">includes</span><span class="p">(</span><span class="nx">text</span><span class="p">));</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="k">of</span><span class="p">(</span><span class="nx">found</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">delay</span><span class="p">(</span><span class="mf">200</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">600</span><span class="p">));</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a><span class="w">  </span><span class="k">private</span><span class="w"> </span><span class="nx">trace</span><span class="p">(</span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">log</span><span class="p">.</span><span class="nx">update</span><span class="p">((</span><span class="nx">j</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[...</span><span class="nx">j</span><span class="p">,</span><span class="w"> </span><span class="sb">`</span><span class="si">${</span><span class="ow">new</span><span class="w"> </span><span class="nb">Date</span><span class="p">().</span><span class="nx">toLocaleTimeString</span><span class="p">()</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">message</span><span class="si">}</span><span class="sb">`</span><span class="p">]);</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 18: las funciones y operadores utilizados se importan todos de <strong><em>[rxjs]</em></strong>;</li>
+</ul>
+<p><strong>Un observable construido a mano</strong>:</p>
+<ul>
+<li>líneas 57–64: un observable se construye a partir de una función, que se llama para cada suscriptor. Emite valores mediante <strong><em>[next]</em></strong> (líneas 58, 59, 61) y luego señala el final del flujo mediante <strong><em>[complete]</em></strong> (línea 62);</li>
+<li>línea 66: <strong><em>[subscribe]: el código se suscribe al flujo.</em></strong> No ocurre nada hasta que alguien se suscribe: la función de las líneas 57–64 se ejecuta solo en ese momento. El objeto pasado a <strong><em>[subscribe]</em></strong> especifica qué hacer con cada valor (línea 67) y con el final del flujo (línea 68);</li>
+<li>línea 66: <strong><em>[pipe]</em></strong> encadena operadores. <strong><em>[takeUntilDestroyed]</em></strong> detiene la suscripción si el componente desaparece: una suscripción olvidada seguiría ejecutándose para un componente que ya no existe.</li>
+</ul>
+<p><strong>Una cuenta regresiva</strong>:</p>
+<ul>
+<li>Línea 31: <strong><em>[interval(1000)]</em></strong> emite 0, 1, 2... cada segundo, indefinidamente;</li>
+<li>Línea 32: <strong><em>[take(20)]</em></strong> conserva solo los primeros veinte valores y luego termina el flujo;</li>
+<li>línea 33: <strong><em>[map]</em></strong> transforma cada valor: 0, 1, 2... se convierten en 19, 18, 17...;</li>
+<li>línea 36: <strong><em>[toSignal]</em></strong> convierte el flujo en un <strong>signal</strong>, que toma el último valor recibido y que la plantilla lee como cualquier otro signal. <strong><em>[toSignal]</em></strong> se suscribe al flujo y cancela la suscripción cuando el componente desaparece. <strong><em>[initialValue]</em></strong>: el valor del signal antes del primer valor del flujo.</li>
+</ul>
+<p>Por convención, el nombre de una variable que contiene un observable termina con <strong><em>[$]</em></strong> (línea 31).</p>
+<p><strong>Una búsqueda mientras se escribe</strong>:</p>
+<p>Este es un ejemplo clásico de observables: queremos buscar médicos cuyos nombres contengan el texto que se está escribiendo, sin enviar una solicitud al servidor con cada pulsación de tecla, y sin el riesgo de que una respuesta lenta sobrescriba una más reciente.</p>
+<ul>
+<li>Línea 40: un <code>***[Subject]</code><strong><em> es un observable en el que </em>*introducimos</strong> los valores nosotros mismos, mediante <code>***[next]***</code>: línea 73, con cada pulsación de tecla (la plantilla llama a <strong><em>[onInput]</em></strong> en cada evento <strong><em>[input]</em></strong>);</li>
+<li>línea 43: el texto se limpia (se eliminan los espacios sobrantes y se pasa a minúsculas);</li>
+<li>línea 44: <strong><em>[debounceTime(400)]</em></strong> solo emite un valor si no llega ningún otro durante 400 ms: mientras el usuario escribe, no se envía nada;</li>
+<li>línea 45: <strong><em>[distinctUntilChanged]</em></strong> ignora un valor idéntico al anterior (“pel”, luego “pelx” borrado de inmediato: de nuevo “pel”);</li>
+<li>línea 46: <strong><em>[filter]</em></strong> retiene solo las cadenas de texto de al menos dos letras;</li>
+<li>línea 47: <strong><em>[tap]</em></strong> realiza una acción sin modificar el flujo: en este caso, una línea en el log;</li>
+<li>línea 50: <strong><em>[switchMap]</em></strong> reemplaza cada texto por el <strong>resultado</strong> de su búsqueda (líneas 77–80: un servidor simulado que responde tras un retraso aleatorio). Si llega un nuevo texto antes de la respuesta, la búsqueda anterior se <strong>abandona</strong>: su respuesta nunca se mostrará. Con el cliente HTTP real, la solicitud incluso se cancelaría;</li>
+<li>línea 52: el signal <strong><em>[results]</em></strong> es una lista vacía mientras ninguna búsqueda haya tenido éxito.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-1-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-1-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-1-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-1-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-1-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-1-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-1-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-1-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-1-10">10</a></span>
+<span class="normal"><a href="#__codelineno-1-11">11</a></span>
+<span class="normal"><a href="#__codelineno-1-12">12</a></span>
+<span class="normal"><a href="#__codelineno-1-13">13</a></span>
+<span class="normal"><a href="#__codelineno-1-14">14</a></span>
+<span class="normal"><a href="#__codelineno-1-15">15</a></span>
+<span class="normal"><a href="#__codelineno-1-16">16</a></span>
+<span class="normal"><a href="#__codelineno-1-17">17</a></span>
+<span class="normal"><a href="#__codelineno-1-18">18</a></span>
+<span class="normal"><a href="#__codelineno-1-19">19</a></span>
+<span class="normal"><a href="#__codelineno-1-20">20</a></span>
+<span class="normal"><a href="#__codelineno-1-21">21</a></span>
+<span class="normal"><a href="#__codelineno-1-22">22</a></span>
+<span class="normal"><a href="#__codelineno-1-23">23</a></span>
+<span class="normal"><a href="#__codelineno-1-24">24</a></span>
+<span class="normal"><a href="#__codelineno-1-25">25</a></span>
+<span class="normal"><a href="#__codelineno-1-26">26</a></span>
+<span class="normal"><a href="#__codelineno-1-27">27</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"container py-4"</span> <span class="na">style</span><span class="o">=</span><span class="s">"max-width: 720px"</span><span class="p">&gt;</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2"></a>  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">"h3 mb-3"</span><span class="p">&gt;</span>Example 19 - RxJS observables<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"card p-3 mb-3"</span><span class="p">&gt;</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5"></a>    <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">"h6"</span><span class="p">&gt;</span>A countdown (interval, take, map, toSignal)<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6"></a>    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"display-6 mb-0"</span><span class="p">&gt;</span>{{ countdown() }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7"></a>  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"card p-3 mb-3"</span><span class="p">&gt;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10"></a>    <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">"h6"</span><span class="p">&gt;</span>A search as you type (debounceTime, switchMap)<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11"></a>    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">class</span><span class="o">=</span><span class="s">"form-control mb-2"</span> <span class="na">placeholder</span><span class="o">=</span><span class="s">"at least two letters: pel, dur..."</span> <span class="err">(</span><span class="na">input</span><span class="err">)="</span><span class="na">onInput</span><span class="err">(</span><span class="na">field</span><span class="err">.</span><span class="na">value</span><span class="err">)"</span> <span class="err">#</span><span class="na">field</span><span class="p">&gt;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12"></a>    <span class="p">&lt;</span><span class="nt">ul</span> <span class="na">class</span><span class="o">=</span><span class="s">"mb-0"</span><span class="p">&gt;</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13"></a>      @for (r of results(); track r) {
+<a id="__codelineno-1-14" name="__codelineno-1-14"></a>        <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ r }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15"></a>      } @empty {
+<a id="__codelineno-1-16" name="__codelineno-1-16"></a>        <span class="p">&lt;</span><span class="nt">li</span> <span class="na">class</span><span class="o">=</span><span class="s">"text-muted"</span><span class="p">&gt;</span>no result<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17"></a>      }
+<a id="__codelineno-1-18" name="__codelineno-1-18"></a>    <span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19"></a>  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21"></a>  <span class="p">&lt;</span><span class="nt">h2</span> <span class="na">class</span><span class="o">=</span><span class="s">"h6"</span><span class="p">&gt;</span>Log<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22"></a>  <span class="p">&lt;</span><span class="nt">ol</span> <span class="na">class</span><span class="o">=</span><span class="s">"small"</span><span class="p">&gt;</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23"></a>    @for (line of log(); track $index) {
+<a id="__codelineno-1-24" name="__codelineno-1-24"></a>      <span class="p">&lt;</span><span class="nt">li</span><span class="p">&gt;</span>{{ line }}<span class="p">&lt;/</span><span class="nt">li</span><span class="p">&gt;</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25"></a>    }
+<a id="__codelineno-1-26" name="__codelineno-1-26"></a>  <span class="p">&lt;/</span><span class="nt">ol</span><span class="p">&gt;</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 6: la cuenta regresiva, un signal;</li>
+<li>línea 11: <strong><em>[#field]</em></strong> es una variable de plantilla: hace referencia al elemento <strong><em>[&lt;input&gt;]</em></strong>, cuyo valor se pasa con cada pulsación de tecla;</li>
+<li>líneas 13–17: los resultados de la búsqueda.</li>
+</ul>
+<p><strong><em>[npm start 19-rxjs]</em></strong>; escriba “pe” y, un poco después, “l”:</p>
+<p><img src="images/10000000000005DC000003458907FED9.png" width="605" height="337" style="width:16cm;height:8.929cm;" alt="Image" class="odt-zoomable" data-zoom-src="images/10000000000005DC000003458907FED9.png" /></p>
+<p>El log muestra ambas búsquedas: “pe” (enviada tras 400 ms de silencio) y luego “pel”.</p>
+<p>¿Signals u observables? Ambos coexisten en <em>[Angular]</em>, con funciones distintas:</p>
+<table class="odt-table" style="border-collapse: collapse; width: 100%; margin-bottom: 1em;"><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;">&nbsp;</td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0"><b>Signal</b></div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0"><b>Observable</b></div></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Valor</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0"><b>tiene </b>siempre un valor actual, que se puede leer en cualquier momento</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">emite valores a lo largo del tiempo; no hay un valor “actual”</div></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Uso</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">el <b>estado </b>de la aplicación (lo que se muestra)</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0"><b>eventos </b>y operaciones asíncronas (solicitudes, temporizadores, pulsaciones de teclas)</div></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Suscripción</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">automática (plantillas, <i><b>[computed]</b></i>, <i><b>[effect]</b></i>)</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">explícita (<i><b>[subscribe]</b></i>), o mediante <i><b>[toSignal]</b></i></div></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Características clave</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Simplicidad</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top; text-align: left;"><div style="margin:0 0 0.5em 0">Operadores: esperar, combinar, abandonar</div></td></tr></table>
+
+<p>La tendencia en <em>[Angular]</em> es almacenar el estado en signals y reservar los observables para los casos en que sus operadores resultan útiles. <strong><em>[toSignal]</em></strong> y <strong><em>[toObservable]</em></strong> permiten pasar de uno a otro. En el caso de estudio, las solicitudes HTTP se convertirán en promesas (<strong><em>[firstValueFrom]</em></strong>, ejemplo 22), y el estado se encapsulará en signals; solo los eventos del enrutador se escucharán como observables.</p>
+<h2 id="52-ejemplo-20-un-estado-compartido">5.2. <span style="color: #2e74b5">Ejemplo 20: un estado compartido</span></h2>
+<p>Con frecuencia, varios componentes necesitan los mismos datos: el usuario conectado (la barra de navegación, los guardias, las páginas), los mensajes que se deben mostrar y el idioma seleccionado. ¿Dónde se deben almacenar estos datos? El curso de <em>[NestJS]</em> abordó la misma pregunta del lado del servidor (ámbitos de aplicación, solicitud y sesión). Este ejemplo la adapta al navegador, con tres “ámbitos”:</p>
+<ul>
+<li>el estado <strong>local</strong> de un componente, almacenado en sus propias variables: desaparece cuando el componente se destruye;</li>
+<li>el estado de un <strong>servicio</strong> raíz: compartido por todos los componentes, sobrevive a su eliminación pero no a una recarga de la página (F5), que reinicia la aplicación;</li>
+<li>el estado almacenado en el <strong>localStorage</strong> del navegador: sobrevive a una recarga de la página e incluso al cierre del navegador.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-2-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-2-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-2-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-2-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-2-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-2-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-2-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-2-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-2-10">10</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1"></a>20-shared-state/src/app/
+<a id="__codelineno-2-2" name="__codelineno-2-2"></a>├── state/
+<a id="__codelineno-2-3" name="__codelineno-2-3"></a>│   ├── cart.service.ts          a shared state
+<a id="__codelineno-2-4" name="__codelineno-2-4"></a>│   └── preferences.service.ts   a state that survives F5
+<a id="__codelineno-2-5" name="__codelineno-2-5"></a>├── components/
+<a id="__codelineno-2-6" name="__codelineno-2-6"></a>│   ├── shop.ts                  adds to the cart
+<a id="__codelineno-2-7" name="__codelineno-2-7"></a>│   ├── cart-summary.ts          displays the cart
+<a id="__codelineno-2-8" name="__codelineno-2-8"></a>│   └── local-counter.ts         a local state
+<a id="__codelineno-2-9" name="__codelineno-2-9"></a>├── app.ts
+<a id="__codelineno-2-10" name="__codelineno-2-10"></a>└── app.html
+</code></pre></div></td></tr></table></div>
+<h3 id="521-un-servicio-que-contiene-el-estado">5.2.1. <span style="color: #1f4d78">Un servicio que contiene el estado</span></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-3-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-3-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-3-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-3-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-3-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-3-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-3-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-3-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-3-10">10</a></span>
+<span class="normal"><a href="#__codelineno-3-11">11</a></span>
+<span class="normal"><a href="#__codelineno-3-12">12</a></span>
+<span class="normal"><a href="#__codelineno-3-13">13</a></span>
+<span class="normal"><a href="#__codelineno-3-14">14</a></span>
+<span class="normal"><a href="#__codelineno-3-15">15</a></span>
+<span class="normal"><a href="#__codelineno-3-16">16</a></span>
+<span class="normal"><a href="#__codelineno-3-17">17</a></span>
+<span class="normal"><a href="#__codelineno-3-18">18</a></span>
+<span class="normal"><a href="#__codelineno-3-19">19</a></span>
+<span class="normal"><a href="#__codelineno-3-20">20</a></span>
+<span class="normal"><a href="#__codelineno-3-21">21</a></span>
+<span class="normal"><a href="#__codelineno-3-22">22</a></span>
+<span class="normal"><a href="#__codelineno-3-23">23</a></span>
+<span class="normal"><a href="#__codelineno-3-24">24</a></span>
+<span class="normal"><a href="#__codelineno-3-25">25</a></span>
+<span class="normal"><a href="#__codelineno-3-26">26</a></span>
+<span class="normal"><a href="#__codelineno-3-27">27</a></span>
+<span class="normal"><a href="#__codelineno-3-28">28</a></span>
+<span class="normal"><a href="#__codelineno-3-29">29</a></span>
+<span class="normal"><a href="#__codelineno-3-30">30</a></span>
+<span class="normal"><a href="#__codelineno-3-31">31</a></span>
+<span class="normal"><a href="#__codelineno-3-32">32</a></span>
+<span class="normal"><a href="#__codelineno-3-33">33</a></span>
+<span class="normal"><a href="#__codelineno-3-34">34</a></span>
+<span class="normal"><a href="#__codelineno-3-35">35</a></span>
+<span class="normal"><a href="#__codelineno-3-36">36</a></span>
+<span class="normal"><a href="#__codelineno-3-37">37</a></span>
+<span class="normal"><a href="#__codelineno-3-38">38</a></span>
+<span class="normal"><a href="#__codelineno-3-39">39</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="c1">// 20-shared-state/src/app/state/cart.service.ts - un ESTADO COMPARTIDO</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="c1">// -------------------------------------------------------------------------</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="c1">// Un servicio raíz (providedIn: 'root') que contiene signals es un</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="c1">// "store": UNA sola instancia para toda la aplicación, que</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="c1">// todos los componentes comparten. Organización habitual:</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="c1">//   - el ESTADO: signals PRIVADOS, modificables solo por el servicio;</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="c1">//   - signals de SOLO LECTURA (asReadonly) y computeds, leídos por</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="c1">//     los componentes;</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="c1">//   - métodos (las "acciones"), los únicos que modifican el estado.</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="c1">// El servicio vive tanto como vive la aplicación: sobrevive a la eliminación de un</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="c1">// componente... pero no a la recarga de la página (F5), que reinicia</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="c1">// la aplicación. (No se necesita una biblioteca adicional, como Pinia</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="c1">// para Vue.js: bastan los servicios y los signals.)</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">computed</span><span class="p">,</span><span class="w"> </span><span class="nx">Injectable</span><span class="p">,</span><span class="w"> </span><span class="nx">signal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">Item</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="w">  </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="kt">string</span><span class="p">;</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="w">  </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="p">}</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="kd">@Injectable</span><span class="p">({</span><span class="w"> </span><span class="nx">providedIn</span><span class="o">:</span><span class="w"> </span><span class="s1">'root'</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">CartService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="w">  </span><span class="k">private</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">_items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="o">&lt;</span><span class="nx">Item</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">([]);</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27"></a>
+<a id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">_items</span><span class="p">.</span><span class="nx">asReadonly</span><span class="p">();</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29"></a><span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">computed</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">_items</span><span class="p">().</span><span class="nx">length</span><span class="p">);</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">total</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">computed</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="nx">_items</span><span class="p">().</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">s</span><span class="p">,</span><span class="w"> </span><span class="nx">a</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">s</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">a</span><span class="p">.</span><span class="nx">price</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">));</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31"></a>
+<a id="__codelineno-3-32" name="__codelineno-3-32"></a><span class="w">  </span><span class="nx">add</span><span class="p">(</span><span class="nx">item</span><span class="o">:</span><span class="w"> </span><span class="kt">Item</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">_items</span><span class="p">.</span><span class="nx">update</span><span class="p">((</span><span class="nx">a</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">[...</span><span class="nx">a</span><span class="p">,</span><span class="w"> </span><span class="nx">item</span><span class="p">]);</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35"></a>
+<a id="__codelineno-3-36" name="__codelineno-3-36"></a><span class="w">  </span><span class="nx">clear</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">_items</span><span class="p">.</span><span class="nx">set</span><span class="p">([]);</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-3-39" name="__codelineno-3-39"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<p>Un servicio raíz que contiene signals actúa como <strong>un almacén</strong> (<em>[store]</em>): una única instancia, compartida por toda la aplicación. Se organiza en tres partes:</p>
+<ul>
+<li>línea 26: <strong>el estado</strong>, en un signal <strong>privado</strong>: ningún componente puede modificarlo directamente;</li>
+<li>líneas 28–30: lo que los componentes <strong>leen</strong>: el estado de solo lectura (<strong><em>[asReadonly]</em></strong>) y los valores calculados (<strong><em>[computed]</em></strong>);</li>
+<li>líneas 32–38: las <strong>acciones</strong>, los únicos métodos que pueden modificar el estado.</li>
+</ul>
+<p>Este enfoque tiene una ventaja clave: cuando un carrito de compras es inválido, las únicas modificaciones posibles ocurren dentro de los métodos del servicio. Con <em>[Vue.js]</em>, normalmente se usa una biblioteca (<em>[Pinia]</em>) para este fin; con <em>[Angular]</em>, bastan los servicios y los signals.</p>
+<h3 id="522-componentes-que-lo-comparten">5.2.2. <span style="color: #1f4d78">Componentes que lo comparten</span></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-4-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-4-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-4-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-4-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-4-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-4-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-4-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-4-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-4-10">10</a></span>
+<span class="normal"><a href="#__codelineno-4-11">11</a></span>
+<span class="normal"><a href="#__codelineno-4-12">12</a></span>
+<span class="normal"><a href="#__codelineno-4-13">13</a></span>
+<span class="normal"><a href="#__codelineno-4-14">14</a></span>
+<span class="normal"><a href="#__codelineno-4-15">15</a></span>
+<span class="normal"><a href="#__codelineno-4-16">16</a></span>
+<span class="normal"><a href="#__codelineno-4-17">17</a></span>
+<span class="normal"><a href="#__codelineno-4-18">18</a></span>
+<span class="normal"><a href="#__codelineno-4-19">19</a></span>
+<span class="normal"><a href="#__codelineno-4-20">20</a></span>
+<span class="normal"><a href="#__codelineno-4-21">21</a></span>
+<span class="normal"><a href="#__codelineno-4-22">22</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="c1">// 20-shared-state/src/app/components/shop.ts - AGREGA al carrito compartido</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="p">,</span><span class="w"> </span><span class="nx">inject</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Item</span><span class="p">,</span><span class="w"> </span><span class="nx">CartService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../state/cart.service'</span><span class="p">;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="kd">@Component</span><span class="p">({</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">'app-shop'</span><span class="p">,</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="w">  </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="sb">`</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="sb">    &lt;div class="card p-3 h-100"&gt;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="sb">      &lt;h2 class="h6"&gt;Shop&lt;/h2&gt;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="sb">      @for (p of products; track p.label) {</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11"></a><span class="sb">        &lt;button class="btn btn-sm btn-outline-primary mb-2" (click)="cart.add(p)"&gt;+ {{ p.label }} (€{{ p.price }})&lt;/button&gt;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12"></a><span class="sb">      }</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13"></a><span class="sb">    &lt;/div&gt;</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14"></a><span class="sb">  `</span><span class="p">,</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15"></a><span class="p">})</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">Shop</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">cart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">inject</span><span class="p">(</span><span class="nx">CartService</span><span class="p">);</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">products</span><span class="o">:</span><span class="w"> </span><span class="kt">Item</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="s1">'Consultation'</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="kt">30</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20"></a><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nx">label</span><span class="o">:</span><span class="w"> </span><span class="s1">'Vaccine'</span><span class="p">,</span><span class="w"> </span><span class="nx">price</span><span class="o">:</span><span class="w"> </span><span class="kt">12.5</span><span class="w"> </span><span class="p">},</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21"></a><span class="w">  </span><span class="p">];</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 17: el componente inyecta el servicio;</li>
+<li>línea 11: llama a una acción.</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-5-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-5-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-5-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-5-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-5-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-5-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-5-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-5-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-5-10">10</a></span>
+<span class="normal"><a href="#__codelineno-5-11">11</a></span>
+<span class="normal"><a href="#__codelineno-5-12">12</a></span>
+<span class="normal"><a href="#__codelineno-5-13">13</a></span>
+<span class="normal"><a href="#__codelineno-5-14">14</a></span>
+<span class="normal"><a href="#__codelineno-5-15">15</a></span>
+<span class="normal"><a href="#__codelineno-5-16">16</a></span>
+<span class="normal"><a href="#__codelineno-5-17">17</a></span>
+<span class="normal"><a href="#__codelineno-5-18">18</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="c1">// 20-shared-state/src/app/components/cart-summary.ts - LEE el mismo carrito</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="p">,</span><span class="w"> </span><span class="nx">inject</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">CartService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'../state/cart.service'</span><span class="p">;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="kd">@Component</span><span class="p">({</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">'app-cart-summary'</span><span class="p">,</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="w">  </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="sb">`</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="sb">    &lt;div class="card p-3 h-100"&gt;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="sb">      &lt;h2 class="h6"&gt;Cart&lt;/h2&gt;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="sb">      &lt;p class="mb-2"&gt;{{ cart.count() }} item(s), €{{ cart.total() }}&lt;/p&gt;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="sb">      &lt;button class="btn btn-sm btn-outline-danger align-self-start" [disabled]="cart.count() === 0"</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="sb">              (click)="cart.clear()"&gt;Clear&lt;/button&gt;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="sb">    &lt;/div&gt;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="sb">  `</span><span class="p">,</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="p">})</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">CartSummary</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">cart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">inject</span><span class="p">(</span><span class="nx">CartService</span><span class="p">);</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 10: lee los valores calculados del mismo servicio;</li>
+<li>línea 12: llama a otra acción.</li>
+</ul>
+<p>Los dos componentes no se conocen entre sí: no hay entradas ni salidas entre ellos. Se comunican a través del servicio.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-6-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-6-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-6-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-6-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-6-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-6-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-6-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-6-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-6-10">10</a></span>
+<span class="normal"><a href="#__codelineno-6-11">11</a></span>
+<span class="normal"><a href="#__codelineno-6-12">12</a></span>
+<span class="normal"><a href="#__codelineno-6-13">13</a></span>
+<span class="normal"><a href="#__codelineno-6-14">14</a></span>
+<span class="normal"><a href="#__codelineno-6-15">15</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="c1">// 20-shared-state/src/app/components/local-counter.ts - un estado LOCAL, que desaparece con el componente</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="p">,</span><span class="w"> </span><span class="nx">signal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="kd">@Component</span><span class="p">({</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">'app-local-counter'</span><span class="p">,</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="w">  </span><span class="nx">template</span><span class="o">:</span><span class="w"> </span><span class="sb">`</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="sb">    &lt;div class="card p-3 h-100"&gt;</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="sb">      &lt;h2 class="h6"&gt;Local state&lt;/h2&gt;</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="sb">      &lt;button class="btn btn-sm btn-outline-secondary align-self-start" (click)="clicks.set(clicks() + 1)"&gt;{{ clicks() }} click(s)&lt;/button&gt;</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="sb">    &lt;/div&gt;</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="sb">  `</span><span class="p">,</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="p">})</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">LocalCounter</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">clicks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 14: un estado local: cada instancia del componente tiene su propio contador, que desaparece cuando la instancia se destruye.</li>
+</ul>
+<h3 id="523-un-estado-que-sobrevive-a-una-recarga-de-la-pagina">5.2.3. <span style="color: #1f4d78">Un estado que sobrevive a una recarga de la página</span></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-7-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-7-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-7-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-7-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-7-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-7-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-7-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-7-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-7-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-7-10">10</a></span>
+<span class="normal"><a href="#__codelineno-7-11">11</a></span>
+<span class="normal"><a href="#__codelineno-7-12">12</a></span>
+<span class="normal"><a href="#__codelineno-7-13">13</a></span>
+<span class="normal"><a href="#__codelineno-7-14">14</a></span>
+<span class="normal"><a href="#__codelineno-7-15">15</a></span>
+<span class="normal"><a href="#__codelineno-7-16">16</a></span>
+<span class="normal"><a href="#__codelineno-7-17">17</a></span>
+<span class="normal"><a href="#__codelineno-7-18">18</a></span>
+<span class="normal"><a href="#__codelineno-7-19">19</a></span>
+<span class="normal"><a href="#__codelineno-7-20">20</a></span>
+<span class="normal"><a href="#__codelineno-7-21">21</a></span>
+<span class="normal"><a href="#__codelineno-7-22">22</a></span>
+<span class="normal"><a href="#__codelineno-7-23">23</a></span>
+<span class="normal"><a href="#__codelineno-7-24">24</a></span>
+<span class="normal"><a href="#__codelineno-7-25">25</a></span>
+<span class="normal"><a href="#__codelineno-7-26">26</a></span>
+<span class="normal"><a href="#__codelineno-7-27">27</a></span>
+<span class="normal"><a href="#__codelineno-7-28">28</a></span>
+<span class="normal"><a href="#__codelineno-7-29">29</a></span>
+<span class="normal"><a href="#__codelineno-7-30">30</a></span>
+<span class="normal"><a href="#__codelineno-7-31">31</a></span>
+<span class="normal"><a href="#__codelineno-7-32">32</a></span>
+<span class="normal"><a href="#__codelineno-7-33">33</a></span>
+<span class="normal"><a href="#__codelineno-7-34">34</a></span>
+<span class="normal"><a href="#__codelineno-7-35">35</a></span>
+<span class="normal"><a href="#__codelineno-7-36">36</a></span>
+<span class="normal"><a href="#__codelineno-7-37">37</a></span>
+<span class="normal"><a href="#__codelineno-7-38">38</a></span>
+<span class="normal"><a href="#__codelineno-7-39">39</a></span>
+<span class="normal"><a href="#__codelineno-7-40">40</a></span>
+<span class="normal"><a href="#__codelineno-7-41">41</a></span>
+<span class="normal"><a href="#__codelineno-7-42">42</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="c1">// 20-shared-state/src/app/state/preferences.service.ts - un estado que sobrevive a F5</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="c1">// -------------------------------------------------------------------------</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="c1">// Para que un dato sobreviva a la recarga de la página, o al cierre</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="c1">// del navegador, debe almacenarse EN el navegador: localStorage (un</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="c1">// pequeño diccionario clave -&gt; cadena, propio de cada sitio).</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="c1">//   - al iniciar, el servicio vuelve a leer localStorage;</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="c1">//   - un effect reescribe localStorage en cada cambio.</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="c1">// NUNCA guardamos allí datos sensibles (contraseña, token): cualquier script</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="c1">// de la página puede leer localStorage.</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">effect</span><span class="p">,</span><span class="w"> </span><span class="nx">Injectable</span><span class="p">,</span><span class="w"> </span><span class="nx">signal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14"></a>
+<a id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="kd">const</span><span class="w"> </span><span class="nx">KEY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'example20.preferences'</span><span class="p">;</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16"></a>
+<a id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="k">export</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">Preferences</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="w">  </span><span class="nx">dark</span><span class="o">:</span><span class="w"> </span><span class="kt">boolean</span><span class="p">;</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="w">  </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="kt">number</span><span class="p">;</span><span class="w"> </span><span class="c1">// tamaño del texto, en px</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="p">}</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21"></a>
+<a id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="kd">function</span><span class="w"> </span><span class="nx">read</span><span class="p">()</span><span class="o">:</span><span class="w"> </span><span class="nx">Preferences</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23"></a><span class="w">  </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">dark</span><span class="o">:</span><span class="w"> </span><span class="kt">false</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="kt">16</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">KEY</span><span class="p">)</span><span class="w"> </span><span class="o">??</span><span class="w"> </span><span class="s1">'{}'</span><span class="p">)</span><span class="w"> </span><span class="p">};</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25"></a><span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">dark</span><span class="o">:</span><span class="w"> </span><span class="kt">false</span><span class="p">,</span><span class="w"> </span><span class="nx">size</span><span class="o">:</span><span class="w"> </span><span class="kt">16</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// contenido ilegible: valores por defecto</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-7-28" name="__codelineno-7-28"></a><span class="p">}</span>
+<a id="__codelineno-7-29" name="__codelineno-7-29"></a>
+<a id="__codelineno-7-30" name="__codelineno-7-30"></a><span class="kd">@Injectable</span><span class="p">({</span><span class="w"> </span><span class="nx">providedIn</span><span class="o">:</span><span class="w"> </span><span class="s1">'root'</span><span class="w"> </span><span class="p">})</span>
+<a id="__codelineno-7-31" name="__codelineno-7-31"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">PreferencesService</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-32" name="__codelineno-7-32"></a><span class="w">  </span><span class="k">readonly</span><span class="w"> </span><span class="nx">preferences</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="o">&lt;</span><span class="nx">Preferences</span><span class="o">&gt;</span><span class="p">(</span><span class="nx">read</span><span class="p">());</span>
+<a id="__codelineno-7-33" name="__codelineno-7-33"></a>
+<a id="__codelineno-7-34" name="__codelineno-7-34"></a><span class="w">  </span><span class="kr">constructor</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-35" name="__codelineno-7-35"></a><span class="w">    </span><span class="nx">effect</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="nx">KEY</span><span class="p">,</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">preferences</span><span class="p">())));</span>
+<a id="__codelineno-7-36" name="__codelineno-7-36"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-7-37" name="__codelineno-7-37"></a>
+<a id="__codelineno-7-38" name="__codelineno-7-38"></a><span class="w">  </span><span class="c1">// una preferencia cambia: reemplazamos el objeto (el signal lo detecta)</span>
+<a id="__codelineno-7-39" name="__codelineno-7-39"></a><span class="w">  </span><span class="nx">update</span><span class="p">(</span><span class="nx">change</span><span class="o">:</span><span class="w"> </span><span class="kt">Partial</span><span class="o">&lt;</span><span class="nx">Preferences</span><span class="o">&gt;</span><span class="p">)</span><span class="o">:</span><span class="w"> </span><span class="ow">void</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-7-40" name="__codelineno-7-40"></a><span class="w">    </span><span class="k">this</span><span class="p">.</span><span class="nx">preferences</span><span class="p">.</span><span class="nx">update</span><span class="p">((</span><span class="nx">p</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">({</span><span class="w"> </span><span class="p">...</span><span class="nx">p</span><span class="p">,</span><span class="w"> </span><span class="p">...</span><span class="nx">change</span><span class="w"> </span><span class="p">}));</span>
+<a id="__codelineno-7-41" name="__codelineno-7-41"></a><span class="w">  </span><span class="p">}</span>
+<a id="__codelineno-7-42" name="__codelineno-7-42"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 15: la clave bajo la cual se almacenan las preferencias en <strong><em>[localStorage]</em></strong>, un pequeño diccionario de clave a cadena específico de cada sitio;</li>
+<li>líneas 22–28: al iniciar, se leen las preferencias guardadas. Los valores predeterminados se complementan con los que se han guardado (mediante el operador <strong><em>[...]</em></strong>); el contenido ilegible se ignora (línea 26);</li>
+<li>línea 32: las preferencias, en un signal;</li>
+<li>línea 35: un <strong>efecto</strong> (ejemplo 13) reescribe el <strong><em>[localStorage]</em></strong> cada vez que el signal cambia: no hay que pensar en ello en cada acción;</li>
+<li>líneas 39–41: la acción que modifica una o varias preferencias (<strong><em>[Partial&lt;Preferences&gt;]</em></strong>: un objeto en el que cada propiedad es opcional). Reemplazamos el objeto en lugar de modificarlo: un signal solo detecta cambios de valor.</li>
+</ul>
+<p>Los datos sensibles (contraseñas, tokens de inicio de sesión) nunca se almacenan en el <strong><em>[localStorage]</em></strong>: cualquier script ejecutado por la página puede leerlos. Por eso el token de inicio de sesión de la aplicación <em>[RdvMedecins]</em> se almacenará en una cookie, inaccesible para el código <em>[JavaScript]</em>.</p>
+<h3 id="524-la-pagina">5.2.4. <span style="color: #1f4d78">La página</span></h3>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-8-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-8-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-8-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-8-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-8-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-8-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-8-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-8-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-8-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-8-10">10</a></span>
+<span class="normal"><a href="#__codelineno-8-11">11</a></span>
+<span class="normal"><a href="#__codelineno-8-12">12</a></span>
+<span class="normal"><a href="#__codelineno-8-13">13</a></span>
+<span class="normal"><a href="#__codelineno-8-14">14</a></span>
+<span class="normal"><a href="#__codelineno-8-15">15</a></span>
+<span class="normal"><a href="#__codelineno-8-16">16</a></span>
+<span class="normal"><a href="#__codelineno-8-17">17</a></span>
+<span class="normal"><a href="#__codelineno-8-18">18</a></span>
+<span class="normal"><a href="#__codelineno-8-19">19</a></span>
+<span class="normal"><a href="#__codelineno-8-20">20</a></span>
+<span class="normal"><a href="#__codelineno-8-21">21</a></span>
+<span class="normal"><a href="#__codelineno-8-22">22</a></span>
+<span class="normal"><a href="#__codelineno-8-23">23</a></span>
+<span class="normal"><a href="#__codelineno-8-24">24</a></span>
+<span class="normal"><a href="#__codelineno-8-25">25</a></span>
+<span class="normal"><a href="#__codelineno-8-26">26</a></span>
+<span class="normal"><a href="#__codelineno-8-27">27</a></span>
+<span class="normal"><a href="#__codelineno-8-28">28</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="c1">// 20-shared-state/src/app/app.ts - tres "ámbitos" de datos del lado del cliente</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="c1">// -------------------------------------------------------------------------</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="c1">// La misma pregunta que el ejemplo 23 del curso de NestJS (ámbito de aplicación,</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="c1">// de petición, de cliente), transpuesta al navegador:</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="c1">//   - el estado LOCAL de un componente (LocalCounter) desaparece con él;</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="c1">//   - el estado de un SERVICIO raíz (el carrito) lo comparten todos los</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="c1">//     componentes y sobrevive a su eliminación - pero no a F5;</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="c1">//   - el estado guardado en localStorage (las preferencias) sobrevive a F5 y al</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="c1">//     cierre del navegador.</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="c1">// Desmarque y vuelva a marcar "mostrar el área", luego recargue la página: compare.</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="c1">// =========================================================================</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13"></a>
+<a id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Component</span><span class="p">,</span><span class="w"> </span><span class="nx">inject</span><span class="p">,</span><span class="w"> </span><span class="nx">signal</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'@angular/core'</span><span class="p">;</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">PreferencesService</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./state/preferences.service'</span><span class="p">;</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">Shop</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./components/shop'</span><span class="p">;</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">CartSummary</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./components/cart-summary'</span><span class="p">;</span>
+<a id="__codelineno-8-18" name="__codelineno-8-18"></a><span class="k">import</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">LocalCounter</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kr">from</span><span class="w"> </span><span class="s1">'./components/local-counter'</span><span class="p">;</span>
+<a id="__codelineno-8-19" name="__codelineno-8-19"></a>
+<a id="__codelineno-8-20" name="__codelineno-8-20"></a><span class="kd">@Component</span><span class="p">({</span>
+<a id="__codelineno-8-21" name="__codelineno-8-21"></a><span class="w">  </span><span class="nx">selector</span><span class="o">:</span><span class="w"> </span><span class="s1">'app-root'</span><span class="p">,</span>
+<a id="__codelineno-8-22" name="__codelineno-8-22"></a><span class="w">  </span><span class="nx">imports</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="nx">Shop</span><span class="p">,</span><span class="w"> </span><span class="nx">CartSummary</span><span class="p">,</span><span class="w"> </span><span class="nx">LocalCounter</span><span class="p">],</span>
+<a id="__codelineno-8-23" name="__codelineno-8-23"></a><span class="w">  </span><span class="nx">templateUrl</span><span class="o">:</span><span class="w"> </span><span class="s1">'./app.html'</span><span class="p">,</span>
+<a id="__codelineno-8-24" name="__codelineno-8-24"></a><span class="p">})</span>
+<a id="__codelineno-8-25" name="__codelineno-8-25"></a><span class="k">export</span><span class="w"> </span><span class="kd">class</span><span class="w"> </span><span class="nx">App</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-8-26" name="__codelineno-8-26"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">prefs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">inject</span><span class="p">(</span><span class="nx">PreferencesService</span><span class="p">);</span>
+<a id="__codelineno-8-27" name="__codelineno-8-27"></a><span class="w">  </span><span class="k">protected</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="nx">areaVisible</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">signal</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<a id="__codelineno-8-28" name="__codelineno-8-28"></a><span class="p">}</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 27: un estado local del componente raíz: ¿se muestra el área?</li>
+</ul>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-9-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-9-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-9-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-9-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-9-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-9-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-9-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-9-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-9-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-9-10">10</a></span>
+<span class="normal"><a href="#__codelineno-9-11">11</a></span>
+<span class="normal"><a href="#__codelineno-9-12">12</a></span>
+<span class="normal"><a href="#__codelineno-9-13">13</a></span>
+<span class="normal"><a href="#__codelineno-9-14">14</a></span>
+<span class="normal"><a href="#__codelineno-9-15">15</a></span>
+<span class="normal"><a href="#__codelineno-9-16">16</a></span>
+<span class="normal"><a href="#__codelineno-9-17">17</a></span>
+<span class="normal"><a href="#__codelineno-9-18">18</a></span>
+<span class="normal"><a href="#__codelineno-9-19">19</a></span>
+<span class="normal"><a href="#__codelineno-9-20">20</a></span>
+<span class="normal"><a href="#__codelineno-9-21">21</a></span>
+<span class="normal"><a href="#__codelineno-9-22">22</a></span>
+<span class="normal"><a href="#__codelineno-9-23">23</a></span>
+<span class="normal"><a href="#__codelineno-9-24">24</a></span>
+<span class="normal"><a href="#__codelineno-9-25">25</a></span>
+<span class="normal"><a href="#__codelineno-9-26">26</a></span>
+<span class="normal"><a href="#__codelineno-9-27">27</a></span>
+<span class="normal"><a href="#__codelineno-9-28">28</a></span>
+<span class="normal"><a href="#__codelineno-9-29">29</a></span>
+<span class="normal"><a href="#__codelineno-9-30">30</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1"></a>@let p = prefs.preferences();
+<a id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"min-vh-100"</span> <span class="err">[</span><span class="na">class</span><span class="err">.</span><span class="na">bg-dark</span><span class="err">]="</span><span class="na">p</span><span class="err">.</span><span class="na">dark</span><span class="err">"</span> <span class="err">[</span><span class="na">class</span><span class="err">.</span><span class="na">text-light</span><span class="err">]="</span><span class="na">p</span><span class="err">.</span><span class="na">dark</span><span class="err">"</span> <span class="err">[</span><span class="na">style</span><span class="err">.</span><span class="na">font-size</span><span class="err">.</span><span class="na">px</span><span class="err">]="</span><span class="na">p</span><span class="err">.</span><span class="na">size</span><span class="err">"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3"></a>  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"container py-4"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4"></a>    <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">"h3 mb-3"</span><span class="p">&gt;</span>Example 20 - shared state<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"d-flex flex-wrap gap-4 mb-3"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6"></a>      <span class="p">&lt;</span><span class="nt">label</span> <span class="na">class</span><span class="o">=</span><span class="s">"form-check-label"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7"></a>        <span class="p">&lt;</span><span class="nt">input</span> <span class="err">#</span><span class="na">dark</span> <span class="na">type</span><span class="o">=</span><span class="s">"checkbox"</span> <span class="na">class</span><span class="o">=</span><span class="s">"form-check-input"</span> <span class="err">[</span><span class="na">checked</span><span class="err">]="</span><span class="na">p</span><span class="err">.</span><span class="na">dark</span><span class="err">"</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8"></a>               <span class="err">(</span><span class="na">change</span><span class="err">)="</span><span class="na">prefs</span><span class="err">.</span><span class="na">update</span><span class="err">({</span> <span class="na">dark:</span> <span class="na">dark</span><span class="err">.</span><span class="na">checked</span> <span class="err">})"</span><span class="p">&gt;</span> dark theme
+<a id="__codelineno-9-9" name="__codelineno-9-9"></a>      <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10"></a>      <span class="p">&lt;</span><span class="nt">label</span><span class="p">&gt;</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11"></a>        text size
+<a id="__codelineno-9-12" name="__codelineno-9-12"></a>        <span class="p">&lt;</span><span class="nt">input</span> <span class="err">#</span><span class="na">size</span> <span class="na">type</span><span class="o">=</span><span class="s">"range"</span> <span class="na">min</span><span class="o">=</span><span class="s">"12"</span> <span class="na">max</span><span class="o">=</span><span class="s">"22"</span> <span class="err">[</span><span class="na">value</span><span class="err">]="</span><span class="na">p</span><span class="err">.</span><span class="na">size</span><span class="err">"</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13"></a>               <span class="err">(</span><span class="na">input</span><span class="err">)="</span><span class="na">prefs</span><span class="err">.</span><span class="na">update</span><span class="err">({</span> <span class="na">size:</span> <span class="err">+</span><span class="na">size</span><span class="err">.</span><span class="na">value</span> <span class="err">})"</span><span class="p">&gt;</span> {{ p.size }} px
+<a id="__codelineno-9-14" name="__codelineno-9-14"></a>      <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15"></a>      <span class="p">&lt;</span><span class="nt">label</span> <span class="na">class</span><span class="o">=</span><span class="s">"form-check-label"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-16" name="__codelineno-9-16"></a>        <span class="p">&lt;</span><span class="nt">input</span> <span class="err">#</span><span class="na">area</span> <span class="na">type</span><span class="o">=</span><span class="s">"checkbox"</span> <span class="na">class</span><span class="o">=</span><span class="s">"form-check-input"</span> <span class="err">[</span><span class="na">checked</span><span class="err">]="</span><span class="na">areaVisible</span><span class="err">()"</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17"></a>               <span class="err">(</span><span class="na">change</span><span class="err">)="</span><span class="na">areaVisible</span><span class="err">.</span><span class="na">set</span><span class="err">(</span><span class="na">area</span><span class="err">.</span><span class="na">checked</span><span class="err">)"</span><span class="p">&gt;</span> show the area
+<a id="__codelineno-9-18" name="__codelineno-9-18"></a>      <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19"></a>    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-20" name="__codelineno-9-20"></a>    @if (areaVisible()) {
+<a id="__codelineno-9-21" name="__codelineno-9-21"></a>      <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"row g-3 text-body"</span><span class="p">&gt;</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"col-md-4"</span><span class="p">&gt;&lt;</span><span class="nt">app-shop</span> <span class="p">/&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"col-md-4"</span><span class="p">&gt;&lt;</span><span class="nt">app-cart-summary</span> <span class="p">/&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24"></a>        <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"col-md-4"</span><span class="p">&gt;&lt;</span><span class="nt">app-local-counter</span> <span class="p">/&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25"></a>      <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-26" name="__codelineno-9-26"></a>    }
+<a id="__codelineno-9-27" name="__codelineno-9-27"></a>    <span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">"mt-3 mb-2"</span><span class="p">&gt;</span>Outside the area, a second summary of the SAME cart (it stays there when the area disappears):<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+<a id="__codelineno-9-28" name="__codelineno-9-28"></a>    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"text-body"</span><span class="p">&gt;&lt;</span><span class="nt">app-cart-summary</span> <span class="p">/&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-29" name="__codelineno-9-29"></a>  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30"></a><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></div></td></tr></table></div>
+<ul>
+<li>línea 1: <strong><em>[@let]</em></strong> declara una variable de plantilla: <strong><em>[p]</em></strong> evita repetir <strong><em>[prefs.preferences()]</em></strong>;</li>
+<li>Línea 2: las preferencias se aplican a toda la página: <strong><em>[[class.bg-dark]]</em></strong> establece la clase si el valor es verdadero; <strong><em>[[style.font-size.px]]</em></strong> establece un tamaño en píxeles;</li>
+<li>Líneas 7–8 y 12–13: cada cambio activa la acción <strong><em>[update]</em></strong>;</li>
+<li>Líneas 20–26: el área que contiene los tres componentes, se muestre o no;</li>
+<li>línea 28: un segundo resumen del mismo carrito de compras, fuera del área.</li>
+</ul>
+<p><strong><em>[npm start 20-shared-state]</em></strong>; se agregan dos artículos al carrito de compras y se hace clic dos veces en el contador local:</p>
+<p><img src="images/10000000000005DC000002A0D3B645EF.png" width="605" height="271" style="width:16cm;height:7.168cm;" alt="Image" class="odt-zoomable" data-zoom-src="images/10000000000005DC000002A0D3B645EF.png" /></p>
+<p>Luego se pueden verificar los tres ámbitos:</p>
+<ul>
+<li>desmarque y vuelva a marcar “show the area”: el contador local se ha reiniciado a 0 (el componente se volvió a crear), el carrito de compras está intacto (el servicio sobrevivió);</li>
+<li>seleccione el tema oscuro y luego recargue la página (F5): el carrito de compras está vacío (la aplicación se reinició), el tema oscuro se conserva (<strong><em>[localStorage]</em></strong> ha sobrevivido).</li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner">
+
+      <div>
+        <a href="https://stahe.github.io" target="_blank">
+          https://stahe.github.io
+        </a>
+        <br>
+        Este tutorial, escrito por la IA <strong>Claude</strong> de Anthropic a petición de <strong>Serge Tahé</strong>, se pone a disposición del público bajo los términos de la
+        <em>licencia Creative Commons Atribución – No Comercial –
+        Compartir Igual 3.0 No adaptada</em>.
+
+      </div>
+
+    </div>
+  </div>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.indexes", "navigation.expand", "toc.integrate", "navigation.top"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="javascripts/focus.js"></script>
+      
+    
+  </body>
+</html>
